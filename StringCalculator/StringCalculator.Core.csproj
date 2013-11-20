@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.2\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,8 +49,23 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StringCalculator.Log4Net\StringCalculator.Log4Net.csproj">
+      <Project>{a004d52a-46da-4652-ab98-e66897eb19cd}</Project>
+      <Name>StringCalculator.Log4Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StringCalculator.LoggingInterface\StringCalculator.LoggingInterface.csproj">
+      <Project>{f1180366-8420-4ca5-96b1-6d7937584f5a}</Project>
+      <Name>StringCalculator.LoggingInterface</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

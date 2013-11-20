@@ -8,9 +8,11 @@ using Should;
 
 namespace StringCalculator.UnitTests.Core
 {
-    using Moq;
+    using log4net.Config;
 
+    using Moq;
     using SpecsFor;
+    using StringCalculator.LoggingInterface;
 
     public class CalculatorSpecs
     {
@@ -21,6 +23,7 @@ namespace StringCalculator.UnitTests.Core
 
             protected override void Given()
             {
+
                 GetMockFor<IUser>()
                     .SetupGet(u => u.Name)
                     .Returns("Sean");
@@ -57,6 +60,12 @@ namespace StringCalculator.UnitTests.Core
                 GetMockFor<Calculator.IConsole>()
                     .Verify(c => c.WriteLine("Hello, Sean"));
             }
+
+            [Test]
+            public void then_it_should_return_true_for_log_write_success()
+            {
+                SUT.wroteToLog.ShouldBeTrue();
+            }
         }
 
         public class when_adding_more_than_one_string : SpecsFor<Calculator>
@@ -80,6 +89,37 @@ namespace StringCalculator.UnitTests.Core
             public void then_it_should_return_a_valid_result()
             {
                 _result.ShouldEqual(10);
+            }
+
+            [Test]
+            public void then_it_should_write_a_message_to_the_console()
+            {
+                GetMockFor<Calculator.IConsole>()
+                    .Verify(c => c.WriteLine("You owe us money!"));
+            }
+
+            [Test]
+            public void then_it_should_return_true_for_log_write_success()
+            {
+                SUT.wroteToLog.ShouldBeTrue();
+            }
+
+            // Older test - but required work around due to using Factory Method to bring up instance of ILogger
+            //[Test]
+            //public void then_it_should_log_the_result_to_the_log_file_with_a_result_of_ten()
+            //{
+            //    GetMockFor<ILogger>()
+            //            .Verify(l => l.WriteMessage("General", LogLevel.FATAL, "We calculated the sum to be: 10"), Times.Once());
+            //}
+        }
+
+        
+        public class when_adding_a_negative_number : SpecsFor<Calculator>
+        {
+            [Test]
+            public void then_it_should_throw_an_invalid_operation_exception()
+            {
+                Assert.Throws<InvalidOperationException>(() => SUT.Add("-1"));
             }
         }
     }
